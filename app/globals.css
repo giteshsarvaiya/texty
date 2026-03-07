@@ -1,26 +1,102 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-dm-sans);
+  --font-serif: var(--font-instrument-serif);
+  --font-mono: var(--font-dm-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --bg: #FAFAF8;
+  --fg: #1C1917;
+  --muted: #78716C;
+  --border: #E7E5E4;
+  --surface: #F5F4F2;
+  --accent: #1C1917;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dot grid for landing hero */
+.dot-grid {
+  background-image: radial-gradient(circle, #C8C5C0 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Editor textarea */
+.editor-area {
+  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-size: 1.125rem;
+  line-height: 1.8;
+  caret-color: var(--fg);
+  resize: none;
+  outline: none;
+  border: none;
+  background: transparent;
+  width: 100%;
+  height: 100%;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* TipTap editor prose styles */
+.editor-prose {
+  min-height: 100%;
+  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-size: 1.125rem;
+  line-height: 1.85;
+  color: var(--fg);
+}
+
+.editor-prose p { margin-bottom: 0.75rem; }
+.editor-prose p.is-empty.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--muted);
+  pointer-events: none;
+  height: 0;
+}
+
+/* Hide placeholder in preview mode */
+.editor-prose[contenteditable="false"] p::before {
+  display: none;
+}
+
+
+/* TipTap collaboration caret */
+.collaboration-cursor__caret {
+  border-left: 2px solid;
+  border-right: 2px solid;
+  margin-left: -1px;
+  margin-right: -1px;
+  pointer-events: none;
+  position: relative;
+  word-break: normal;
+}
+.collaboration-cursor__label {
+  border-radius: 3px 3px 3px 0;
+  color: #fff;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 600;
+  left: -1px;
+  line-height: normal;
+  padding: 0.1rem 0.4rem;
+  position: absolute;
+  top: -1.4em;
+  user-select: none;
+  white-space: nowrap;
+  font-family: var(--font-dm-sans), sans-serif;
 }

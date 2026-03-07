@@ -5,15 +5,35 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:worker": "opennextjs-cloudflare build",
+    "deploy": "opennextjs-cloudflare build && wrangler deploy",
+    "preview": "opennextjs-cloudflare build && wrangler dev",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
+    "@tiptap/extension-bubble-menu": "^3.20.1",
+    "@tiptap/extension-collaboration": "^3.20.1",
+    "@tiptap/extension-collaboration-caret": "^3.20.1",
+    "@tiptap/extension-placeholder": "^3.20.1",
+    "@tiptap/extension-strike": "^3.20.1",
+    "@tiptap/extension-table": "^3.20.1",
+    "@tiptap/extension-table-cell": "^3.20.1",
+    "@tiptap/extension-table-header": "^3.20.1",
+    "@tiptap/extension-table-row": "^3.20.1",
+    "@tiptap/extension-typography": "^3.20.1",
+    "@tiptap/react": "^3.20.1",
+    "@tiptap/starter-kit": "^3.20.1",
+    "framer-motion": "^12.35.1",
+    "livetexts": "^0.1.4",
+    "lucide-react": "^0.577.0",
     "next": "16.1.6",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "yjs": "^13.6.29"
   },
   "devDependencies": {
+    "@opennextjs/cloudflare": "^1.17.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -21,6 +41,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.71.0"
   }
 }
