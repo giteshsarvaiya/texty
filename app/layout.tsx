@@ -33,6 +33,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'texty — write together',
     description: 'Collaborative documents with real-time editing, offline sync, and one-click publishing.',
+    images: [{ url: '/og.png', width: 1000, height: 525 }],
   },
 }
 

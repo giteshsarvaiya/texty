@@ -237,14 +237,24 @@ export default function Landing() {
           </a>
           {' '}· A weekend project · Free & open source
         </p>
-        <a
-          href="https://github.com/giteshsarvaiya/crdt-rooms"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-1.5 transition-colors hover:opacity-70"
-        >
-          <Github size={12} /> View on GitHub
-        </a>
+        <div className="flex items-center gap-4">
+          <a
+            href="https://liveblocks.io"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-colors hover:opacity-70"
+          >
+            Built with Liveblocks
+          </a>
+          <a
+            href="https://github.com/giteshsarvaiya/crdt-rooms"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 transition-colors hover:opacity-70"
+          >
+            <Github size={12} /> View on GitHub
+          </a>
+        </div>
       </footer>
     </div>
   )
