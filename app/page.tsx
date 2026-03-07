@@ -239,12 +239,12 @@ export default function Landing() {
         </p>
         <div className="flex items-center gap-4">
           <a
-            href="https://liveblocks.io"
+            href="https://github.com/giteshsarvaiya/crdt-rooms"
             target="_blank"
             rel="noopener noreferrer"
             className="transition-colors hover:opacity-70"
           >
-            Built with Liveblocks
+            Built with livetexts
           </a>
           <a
             href="https://github.com/giteshsarvaiya/crdt-rooms"
