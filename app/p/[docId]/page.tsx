@@ -1,11 +1,55 @@
 export const runtime = 'edge'
 
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import * as Y from 'yjs'
 import { PublicEditor } from './PublicEditor'
 
 interface Props {
   params: Promise<{ docId: string }>
+}
+
+function extractTitleFromYdoc(ydocBase64: string): string {
+  try {
+    const d = new Y.Doc()
+    const bytes = new Uint8Array(atob(ydocBase64).split('').map(c => c.charCodeAt(0)))
+    Y.applyUpdate(d, bytes)
+    const fragment = d.getXmlFragment('default')
+
+    function textFromElement(el: Y.XmlElement): string {
+      let text = ''
+      el.forEach((child) => {
+        if (child instanceof Y.XmlText) {
+          text += child.toString()
+        } else if (child instanceof Y.XmlElement) {
+          text += textFromElement(child)
+        }
+      })
+      return text
+    }
+
+    for (const child of fragment.toArray()) {
+      if (child instanceof Y.XmlElement) {
+        const text = textFromElement(child).trim()
+        if (text) return text
+      }
+    }
+    return ''
+  } catch {
+    return ''
+  }
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { docId } = await params
+  const ydoc = await getDocYdoc(docId)
+  const docTitle = ydoc ? extractTitleFromYdoc(ydoc) : ''
+  const title = docTitle || docId
+  return {
+    title: `${title} — texty`,
+    openGraph: { title: `${title} — texty` },
+  }
 }
 
 async function getDocYdoc(docId: string): Promise<string | null> {

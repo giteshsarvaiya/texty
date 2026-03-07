@@ -27,6 +27,9 @@ const dmMono = DM_Mono({
 export const metadata: Metadata = {
   title: 'texty — write together',
   description: 'Collaborative documents with real-time editing, offline sync, and one-click publishing.',
+  icons: {
+    icon: '/favicon.svg',
+  },
   openGraph: {
     title: 'texty — write together',
     description: 'Collaborative documents with real-time editing, offline sync, and one-click publishing.',
