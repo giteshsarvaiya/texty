@@ -168,7 +168,7 @@ export default function Landing() {
             ))}
           </div>
 
-          {/* Publish and forget callout */}
+          {/* Join code = edit key callout */}
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -177,10 +177,11 @@ export default function Landing() {
             className="mt-12 p-5 rounded-xl border"
             style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
           >
-            <p className="text-sm font-semibold mb-1" style={{ color: 'var(--fg)' }}>Publish and forget — by design.</p>
+            <p className="text-sm font-semibold mb-2" style={{ color: 'var(--fg)' }}>Your join code is your edit key.</p>
             <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
-              texty has no accounts, no dashboard, no edit history. You write, you publish, you move on.
-              The join code is your key — keep it if you need it, or don&apos;t. Either way, your published doc lives on.
+              texty has no accounts. When you create a doc, you get a join code.
+              That code is the only way to come back and edit it later — from any device, any browser.
+              Keep it safe. Lose it, and your doc is published as-is forever.
             </p>
           </motion.div>
         </motion.div>

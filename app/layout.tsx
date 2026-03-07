@@ -2,6 +2,7 @@ export const runtime = 'edge'
 
 import type { Metadata } from 'next'
 import { DM_Sans, Instrument_Serif, DM_Mono } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 
 const dmSans = DM_Sans({
@@ -37,6 +38,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={`${dmSans.variable} ${instrumentSerif.variable} ${dmMono.variable} font-sans antialiased`}>
         {children}
+        <Script
+          data-goatcounter="https://texty.goatcounter.com/count"
+          src="//gc.zgo.at/count.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   )

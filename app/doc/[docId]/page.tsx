@@ -4,6 +4,7 @@ import { use, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Globe, GlobeLock, Users, Loader2, Copy, Check } from 'lucide-react'
+import { trackEvent } from '@/lib/analytics'
 import { RoomProvider } from '@/lib/RoomContext'
 import { Editor } from '@/components/Editor'
 import { UserList } from '@/components/UserList'
@@ -51,7 +52,7 @@ function DocUI({ docId, joinCode }: { docId: string; joinCode: string }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ roomId: docId, joinCode, published: next }),
       })
-      if (res.ok) setPublished(next)
+      if (res.ok) { setPublished(next); if (next) trackEvent('doc_published') }
     } finally {
       setPublishing(false)
     }

@@ -3,8 +3,9 @@
 import { useState, useEffect, FormEvent } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, Plus, LogIn, Copy, Check, Clock } from 'lucide-react'
+import { ArrowRight, Plus, LogIn, Copy, Check, Clock, KeyRound } from 'lucide-react'
 import Link from 'next/link'
+import { trackEvent } from '@/lib/analytics'
 
 function getUserId(): string {
   if (typeof window === 'undefined') return ''
@@ -85,6 +86,7 @@ export default function AppPage() {
       localStorage.setItem('texty-recent', JSON.stringify(
         [{ docId: roomId, joinCode: code, savedAt: Date.now() }, ...existing.filter(d => d.docId !== roomId)].slice(0, 10)
       ))
+      trackEvent('doc_created')
       setShareInfo({ inviteLink, docUrl, joinCode: code, docId: roomId })
     } catch {
       setError('Network error.')
@@ -107,6 +109,7 @@ export default function AppPage() {
   function handleJoin(e: FormEvent) {
     e.preventDefault()
     if (!name.trim() || !joinDoc.trim() || !joinCode.trim()) return
+    trackEvent('doc_edited')
     router.push(`/doc/${encodeURIComponent(slugify(joinDoc))}?name=${encodeURIComponent(name.trim())}&code=${joinCode.trim().toUpperCase()}`)
   }
 
@@ -136,10 +139,12 @@ export default function AppPage() {
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
             <h1 className="text-2xl font-semibold mb-1" style={{ color: 'var(--fg)' }}>
-              {tab === 'create' ? 'New document' : 'Join document'}
+              {tab === 'create' ? 'New document' : 'Edit a document'}
             </h1>
             <p className="text-sm mb-8" style={{ color: 'var(--muted)' }}>
-              {tab === 'create' ? 'Create a doc and invite anyone to write with you.' : 'Enter your name and the join code you received.'}
+              {tab === 'create'
+                ? 'Create a doc and invite anyone to write with you.'
+                : 'Have a join code? Enter the document name and your code to open and edit it.'}
             </p>
 
             {/* Tab switcher */}
@@ -154,7 +159,7 @@ export default function AppPage() {
                     : { color: 'var(--muted)' }
                   }
                 >
-                  {t === 'create' ? <><Plus size={13} /> Create</> : <><LogIn size={13} /> Join</>}
+                  {t === 'create' ? <><Plus size={13} /> Create</> : <><KeyRound size={13} /> Edit</>}
                 </button>
               ))}
             </div>
@@ -168,16 +173,19 @@ export default function AppPage() {
                   exit={{ opacity: 0, y: -8 }}
                   className="space-y-3"
                 >
-                  {/* Join code — most important thing to share */}
+                  {/* Join code — save warning */}
                   <div className="p-4 rounded-lg border text-center" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
                     <p className="text-xs font-medium mb-2" style={{ color: 'var(--muted)' }}>Your join code</p>
-                    <p className="font-mono text-3xl font-bold tracking-widest mb-1" style={{ color: 'var(--fg)' }}>{shareInfo.joinCode}</p>
-                    <p className="text-xs" style={{ color: 'var(--muted)' }}>Share this code with anyone you want to write with</p>
+                    <p className="font-mono text-3xl font-bold tracking-widest mb-3" style={{ color: 'var(--fg)' }}>{shareInfo.joinCode}</p>
+                    <div className="rounded-md px-3 py-2" style={{ background: 'var(--bg)', border: '1px solid var(--border)' }}>
+                      <p className="text-xs font-medium" style={{ color: 'var(--fg)' }}>Save this code — it&apos;s your edit key.</p>
+                      <p className="text-xs mt-0.5" style={{ color: 'var(--muted)' }}>Anyone with the document name + this code can open and edit it, from any device. There is no other way to recover it.</p>
+                    </div>
                   </div>
 
                   {/* Invite link */}
                   <div className="p-3 rounded-lg border" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
-                    <p className="text-xs font-medium mb-2" style={{ color: 'var(--muted)' }}>Or share this invite link</p>
+                    <p className="text-xs font-medium mb-2" style={{ color: 'var(--muted)' }}>Share this link to invite collaborators</p>
                     <div className="flex gap-2">
                       <input
                         readOnly
@@ -312,7 +320,7 @@ export default function AppPage() {
                     className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-opacity hover:opacity-85 disabled:opacity-40 disabled:cursor-not-allowed"
                     style={{ background: 'var(--fg)', color: 'var(--bg)' }}
                   >
-                    <LogIn size={14} /> Join document
+                    <KeyRound size={14} /> Open and edit
                   </button>
                 </motion.form>
               )}

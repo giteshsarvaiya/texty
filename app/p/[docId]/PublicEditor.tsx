@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { trackEvent } from '@/lib/analytics'
 import * as Y from 'yjs'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
@@ -13,6 +14,8 @@ export function PublicEditor({ ydocBase64 }: { ydocBase64: string }) {
     Y.applyUpdate(d, bytes)
     return d
   })
+
+  useEffect(() => { trackEvent('doc_viewed') }, [])
 
   const editor = useEditor({
     extensions: [
