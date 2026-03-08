@@ -23,6 +23,7 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://texty.giteshsarvaiya.xyz"),
   title: "texty — write together",
   description:
     "Collaborative documents with real-time editing, offline sync, and one-click publishing.",

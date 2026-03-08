@@ -1,5 +1,3 @@
-export const runtime = 'edge'
-
 import { NextRequest, NextResponse } from 'next/server'
 
 async function signJWT(payload: Record<string, unknown>, secret: string): Promise<string> {

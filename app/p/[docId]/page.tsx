@@ -1,5 +1,3 @@
-export const runtime = 'edge'
-
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -57,7 +55,7 @@ async function getDocYdoc(docId: string): Promise<string | null> {
   if (!workerUrl) return null
   try {
     const res = await fetch(`${workerUrl}/rooms/${encodeURIComponent(docId)}/content`, {
-      next: { revalidate: 10 },
+      cache: 'no-store',
     })
     if (!res.ok) return null
     const { ydoc } = await res.json() as { ydoc: string }
@@ -74,7 +72,7 @@ export default async function PublicDocPage({ params }: Props) {
   if (ydoc === null) notFound()
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--bg)', color: 'var(--fg)' }}>
+    <div className="flex flex-col min-h-screen" style={{ background: 'var(--bg)', color: 'var(--fg)' }}>
       {/* Nav */}
       <nav
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-8 py-4 border-b"
@@ -91,7 +89,7 @@ export default async function PublicDocPage({ params }: Props) {
       </nav>
 
       {/* Document */}
-      <article className="max-w-2xl mx-auto px-4 sm:px-8 pt-28 md:pt-32 pb-20 md:pb-24">
+      <article className="flex-1 max-w-2xl mx-auto w-full px-4 sm:px-8 pt-28 md:pt-32 pb-20 md:pb-24">
         <p className="text-xs font-mono mb-8" style={{ color: 'var(--muted)' }}>{docId}</p>
         <PublicEditor ydocBase64={ydoc} />
       </article>

@@ -45,7 +45,8 @@ function AppPageInner() {
   const [error,     setError]     = useState('')
   const [suggested, setSuggested] = useState('')
   const [shareInfo, setShareInfo] = useState<{ inviteLink: string; docUrl: string; joinCode: string; docId: string } | null>(null)
-  const [copied,    setCopied]    = useState(false)
+  const [copied,        setCopied]        = useState(false)
+  const [joinCodeCopied, setJoinCodeCopied] = useState(false)
   const [recentDocs, setRecentDocs] = useState<RecentDoc[]>([])
 
   // Pre-fill join form from URL params (e.g. from invite links)
@@ -120,6 +121,13 @@ function AppPageInner() {
     setTimeout(() => setCopied(false), 2000)
   }
 
+  function copyJoinCode() {
+    if (!shareInfo) return
+    navigator.clipboard.writeText(shareInfo.joinCode)
+    setJoinCodeCopied(true)
+    setTimeout(() => setJoinCodeCopied(false), 2000)
+  }
+
   const inputCls = "w-full px-3 py-2.5 text-sm rounded-lg border bg-transparent outline-none transition-all focus:ring-2 focus:ring-stone-300"
   const inputStyle = { borderColor: 'var(--border)', color: 'var(--fg)', background: 'var(--bg)' }
 
@@ -176,7 +184,17 @@ function AppPageInner() {
                   {/* Join code — save warning */}
                   <div className="p-4 rounded-lg border text-center" style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}>
                     <p className="text-xs font-medium mb-2" style={{ color: 'var(--muted)' }}>Your join code</p>
-                    <p className="font-mono text-3xl font-bold tracking-widest mb-3" style={{ color: 'var(--fg)' }}>{shareInfo.joinCode}</p>
+                    <button
+                      onClick={copyJoinCode}
+                      className="font-mono text-3xl font-bold tracking-widest mb-2 transition-opacity hover:opacity-70 flex items-center justify-center gap-2 w-full"
+                      style={{ color: 'var(--fg)' }}
+                      title="Click to copy"
+                    >
+                      {joinCodeCopied ? <><Check size={20} style={{ color: '#22c55e' }} /><span>{shareInfo.joinCode}</span></> : shareInfo.joinCode}
+                    </button>
+                    <p className="text-xs mb-3" style={{ color: 'var(--muted)' }}>
+                      {joinCodeCopied ? 'Copied to clipboard!' : 'tap to copy'}
+                    </p>
                     <div className="rounded-md px-3 py-2" style={{ background: 'var(--bg)', border: '1px solid var(--border)' }}>
                       <p className="text-xs font-medium" style={{ color: 'var(--fg)' }}>Save this code — it&apos;s your edit key.</p>
                       <p className="text-xs mt-0.5" style={{ color: 'var(--muted)' }}>Anyone with the document name + this code can open and edit it, from any device. There is no other way to recover it.</p>

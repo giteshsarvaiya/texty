@@ -76,7 +76,8 @@ body {
 
 
 /* TipTap collaboration caret */
-.collaboration-cursor__caret {
+.collaboration-cursor__caret,
+.collaboration-carets__caret {
   border-left: 2px solid;
   border-right: 2px solid;
   margin-left: -1px;
@@ -85,8 +86,9 @@ body {
   position: relative;
   word-break: normal;
 }
-.collaboration-cursor__label {
-  border-radius: 3px 3px 3px 0;
+.collaboration-cursor__label,
+.collaboration-carets__label {
+  border-radius: 0 3px 3px 3px;
   color: #fff;
   font-size: 11px;
   font-style: normal;
@@ -95,8 +97,9 @@ body {
   line-height: normal;
   padding: 0.1rem 0.4rem;
   position: absolute;
-  top: -1.4em;
+  top: 1.2em;
   user-select: none;
   white-space: nowrap;
   font-family: var(--font-dm-sans), sans-serif;
+  z-index: 10;
 }

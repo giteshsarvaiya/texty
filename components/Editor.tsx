@@ -42,7 +42,6 @@ export function Editor() {
     immediatelyRender: false,
   })
 
-  // Keep awareness user info in sync
   useEffect(() => {
     if (!room.awareness) return
     room.awareness.setLocalStateField('user', {
@@ -51,11 +50,5 @@ export function Editor() {
     })
   }, [room.awareness, self.name, self.userId])
 
-  return (
-    <div className="flex flex-col w-full h-full">
-      <div className="flex-1 overflow-y-auto">
-        <EditorContent editor={editor} className="w-full h-full" />
-      </div>
-    </div>
-  )
+  return <EditorContent editor={editor} className="w-full" />
 }
