@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, FormEvent } from 'react'
+import { useState, useEffect, FormEvent, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, Plus, LogIn, Copy, Check, Clock, KeyRound } from 'lucide-react'
@@ -32,7 +32,7 @@ function getRecentDocs(): RecentDoc[] {
   try { return JSON.parse(localStorage.getItem('texty-recent') || '[]') } catch { return [] }
 }
 
-export default function AppPage() {
+function AppPageInner() {
   const router       = useRouter()
   const searchParams = useSearchParams()
 
@@ -355,5 +355,13 @@ export default function AppPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function AppPage() {
+  return (
+    <Suspense>
+      <AppPageInner />
+    </Suspense>
   )
 }
