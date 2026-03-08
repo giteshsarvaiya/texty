@@ -7,4 +7,9 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS",
   },
+  "vars": {
+    "CRDT_WORKER_URL": "https://crdt-rooms.gitesh-sarvaiya28.workers.dev",
+    "NEXT_PUBLIC_CRDT_SERVER_URL": "wss://crdt-rooms.gitesh-sarvaiya28.workers.dev",
+    "NEXT_PUBLIC_CRDT_WORKER_URL": "https://crdt-rooms.gitesh-sarvaiya28.workers.dev",
+  },
 }
