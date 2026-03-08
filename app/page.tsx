@@ -22,7 +22,7 @@ export default function Landing() {
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-8 py-4 border-b"
         style={{ borderColor: 'var(--border)', background: 'rgba(250,250,248,0.85)', backdropFilter: 'blur(12px)' }}
       >
-        <span className="font-serif italic text-xl tracking-tight">texty</span>
+        <span className="font-serif italic text-3xl tracking-tight">texty</span>
         <Link
           href="/app"
           className="flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-md transition-opacity hover:opacity-80"

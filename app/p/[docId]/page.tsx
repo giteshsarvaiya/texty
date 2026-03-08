@@ -78,7 +78,7 @@ export default async function PublicDocPage({ params }: Props) {
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-8 py-4 border-b"
         style={{ borderColor: 'var(--border)', background: 'rgba(250,250,248,0.9)', backdropFilter: 'blur(12px)' }}
       >
-        <Link href="/" className="font-serif italic text-2xl" style={{ color: 'var(--fg)' }}>texty</Link>
+        <Link href="/" className="font-serif italic text-3xl" style={{ color: 'var(--fg)' }}>texty</Link>
         <Link
           href="/app"
           className="text-xs px-3 py-1.5 rounded-md border transition-colors hover:bg-stone-50"
