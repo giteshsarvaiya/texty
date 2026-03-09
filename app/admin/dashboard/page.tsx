@@ -57,8 +57,12 @@ export default function AdminDashboard() {
     router.push('/admin')
   }
 
-  const published = rooms.filter(r => r.published)
-  const drafts    = rooms.filter(r => !r.published)
+  const published = rooms
+    .filter(r => r.published)
+    .sort((a, b) => new Date(b.publishedAt ?? b.createdAt).getTime() - new Date(a.publishedAt ?? a.createdAt).getTime())
+  const drafts = rooms
+    .filter(r => !r.published)
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
 
   function formatDate(iso?: string) {
     if (!iso) return '—'
