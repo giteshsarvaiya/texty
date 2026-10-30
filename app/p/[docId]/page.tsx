@@ -1,78 +1,61 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import * as Y from 'yjs'
+import { cache } from 'react'
+import { getDocYdoc, renderDoc } from '@/lib/docContent'
 import { PublicEditor } from './PublicEditor'
 
 interface Props {
   params: Promise<{ docId: string }>
 }
 
-function extractTitleFromYdoc(ydocBase64: string): string {
-  try {
-    const d = new Y.Doc()
-    const bytes = new Uint8Array(atob(ydocBase64).split('').map(c => c.charCodeAt(0)))
-    Y.applyUpdate(d, bytes)
-    const fragment = d.getXmlFragment('default')
-
-    function textFromElement(el: Y.XmlElement): string {
-      let text = ''
-      el.forEach((child) => {
-        if (child instanceof Y.XmlText) {
-          text += child.toString()
-        } else if (child instanceof Y.XmlElement) {
-          text += textFromElement(child)
-        }
-      })
-      return text
-    }
-
-    for (const child of fragment.toArray()) {
-      if (child instanceof Y.XmlElement) {
-        const text = textFromElement(child).trim()
-        if (text) return text
-      }
-    }
-    return ''
-  } catch {
-    return ''
-  }
-}
+// Shared between generateMetadata and the page so the worker is hit once per request
+const loadDoc = cache(async (docId: string) => {
+  const ydoc = await getDocYdoc(docId)
+  return ydoc === null ? null : { ydoc, ...renderDoc(ydoc) }
+})
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { docId } = await params
-  const ydoc = await getDocYdoc(docId)
-  const docTitle = ydoc ? extractTitleFromYdoc(ydoc) : ''
-  const title = docTitle || docId
-  return {
-    title: `${title} — texty`,
-    openGraph: { title: `${title} — texty` },
-  }
-}
+  const doc = await loadDoc(docId)
+  const title = `${doc?.title || docId} — texty`
+  const description = doc?.description || 'A document published with texty.'
+  const url = `/p/${encodeURIComponent(docId)}`
 
-async function getDocYdoc(docId: string): Promise<string | null> {
-  const workerUrl = process.env.CRDT_WORKER_URL
-  if (!workerUrl) return null
-  try {
-    const res = await fetch(`${workerUrl}/rooms/${encodeURIComponent(docId)}/content`, {
-      cache: 'no-store',
-    })
-    if (!res.ok) return null
-    const { ydoc } = await res.json() as { ydoc: string }
-    return ydoc
-  } catch {
-    return null
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: url,
+      types: { 'text/markdown': `${url}.md` },
+    },
+    openGraph: { type: 'article', url, siteName: 'texty', title, description },
+    twitter: { card: 'summary_large_image', title, description },
   }
 }
 
 export default async function PublicDocPage({ params }: Props) {
   const { docId } = await params
-  const ydoc      = await getDocYdoc(docId)
+  const doc = await loadDoc(docId)
 
-  if (ydoc === null) notFound()
+  if (doc === null) notFound()
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: doc.title || docId,
+    description: doc.description,
+    url: `https://texty.giteshsarvaiya.com/p/${encodeURIComponent(docId)}`,
+    publisher: { '@type': 'Organization', name: 'texty' },
+  }
 
   return (
     <div className="flex flex-col min-h-screen" style={{ background: 'var(--bg)', color: 'var(--fg)' }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
+      />
+
       {/* Nav */}
       <nav
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-8 py-4 border-b"
@@ -91,7 +74,7 @@ export default async function PublicDocPage({ params }: Props) {
       {/* Document */}
       <article className="flex-1 max-w-2xl mx-auto w-full px-4 sm:px-8 pt-28 md:pt-32 pb-20 md:pb-24">
         <p className="text-xs font-mono mb-8" style={{ color: 'var(--muted)' }}>{docId}</p>
-        <PublicEditor ydocBase64={ydoc} />
+        <PublicEditor ydocBase64={doc.ydoc} html={doc.html} />
       </article>
 
       {/* Footer */}

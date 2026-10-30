@@ -2,18 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import { trackEvent } from '@/lib/analytics'
-import * as Y from 'yjs'
+import { decodeYdoc } from '@/lib/docContent'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Collaboration from '@tiptap/extension-collaboration'
 
-export function PublicEditor({ ydocBase64 }: { ydocBase64: string }) {
-  const [doc] = useState(() => {
-    const d     = new Y.Doc()
-    const bytes = new Uint8Array(atob(ydocBase64).split('').map(c => c.charCodeAt(0)))
-    Y.applyUpdate(d, bytes)
-    return d
-  })
+export function PublicEditor({ ydocBase64, html }: { ydocBase64: string; html: string }) {
+  const [doc] = useState(() => decodeYdoc(ydocBase64))
 
   useEffect(() => { trackEvent('doc_viewed') }, [])
 
@@ -29,6 +24,11 @@ export function PublicEditor({ ydocBase64 }: { ydocBase64: string }) {
       attributes: { class: 'editor-prose focus:outline-none' },
     },
   })
+
+  // Server-rendered HTML until Tiptap mounts, so the content is in the initial HTML
+  if (!editor) {
+    return <div className="editor-prose" dangerouslySetInnerHTML={{ __html: html }} />
+  }
 
   return <EditorContent editor={editor} />
 }

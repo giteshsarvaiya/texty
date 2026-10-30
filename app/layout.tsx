@@ -23,18 +23,19 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://texty.giteshsarvaiya.xyz"),
+  metadataBase: new URL("https://texty.giteshsarvaiya.com"),
   title: "texty — write together",
   description:
     "Collaborative documents with real-time editing, offline sync, and one-click publishing.",
-  icons: {
-    icon: "/favicon.svg",
-  },
   openGraph: {
     title: "texty — write together",
     description:
       "Collaborative documents with real-time editing, offline sync, and one-click publishing.",
     images: [{ url: "/og.png", width: 1000, height: 525 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og.png"],
   },
 };
 
